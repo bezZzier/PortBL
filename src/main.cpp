@@ -68,14 +68,43 @@ int main(int argc, char const *argv[]) {
     if (argc == 3) {
         std::string arg1 = argv[1];
         std::string arg2 = argv[2];
-        if(arg1 == "delete" || arg1 == "unalias") {
-            if (input_type(arg2) == 1) {
+        
+        if (arg1 == "delete" || arg1 == "unalias") {
+            int type = input_type(arg2);
+
+            if (type == 1) { // its an alias
                 alias_to_port.erase(arg2);
-                std::cout << "Succesfully unaliased the port." << "\n";
+                std::cout << "Successfully unaliased '" << arg2 << "'.\n";
+            } 
+            else if (type == 2) { // its a port number
+                int targetPort = std::stoi(arg2);
+                std::string foundAlias = "";
+
+                // find the alias that matches this port
+                for (auto const& [name, port] : alias_to_port) {
+                    if (port == targetPort) {
+                        foundAlias = name;
+                        break; 
+                    }
+                }
+
+                if (!foundAlias.empty()) {
+                    alias_to_port.erase(foundAlias);
+                    std::cout << "Successfully removed alias '" << foundAlias << "' for port " << targetPort << ".\n";
+                } else {
+                    std::cout << "No alias found for port " << targetPort << ".\n";
+                }
+            } 
+            else {
+                std::cout << "Error: '" << arg2 << "' is neither a known alias nor a port number.\n";
             }
-            else if (input_type(arg2) == 2) {
-                
+
+            // Always save after a successful change!
+            fout.open(datapath);
+            for (auto const& [name, port] : alias_to_port) {
+                fout << name << " " << port << "\n";
             }
+            fout.close();
         }
     }
 
