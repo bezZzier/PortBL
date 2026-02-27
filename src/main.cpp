@@ -69,7 +69,7 @@ int main(int argc, char const *argv[]) {
         std::string arg1 = argv[1];
         std::string arg2 = argv[2];
         
-        if (arg1 == "delete" || arg1 == "unalias") {
+        if (arg1 == "unalias") {
             int type = input_type(arg2);
 
             if (type == 1) { // its an alias
@@ -99,7 +99,7 @@ int main(int argc, char const *argv[]) {
                 std::cout << "Error: '" << arg2 << "' is neither a known alias nor a port number.\n";
             }
 
-            // Always save after a successful change!
+            // save after a successful change
             fout.open(datapath);
             for (auto const& [name, port] : alias_to_port) {
                 fout << name << " " << port << "\n";
@@ -118,16 +118,19 @@ int main(int argc, char const *argv[]) {
         if (arg1 == "help") {
             std::cout << "--- PortBL Commands ---" << "\n";
             std::cout << "pbl list - Lists all aliases and their corresponding port number." << "\n";
-            std::cout << "pbl add [alias] [port number]" << "\n";
+            std::cout << "pbl add [alias] [port number] - Add an alias to a specfic port." << "\n";
+            std::cout << "pbl clear - clears all port aliases";
+            std::cout << "pbl unalias [alias / port number] - Removes an alias from a port.";
             std::cout << "\n";
         }
     }
     if (argc == 1) {
-        std::cout << "--- PortBL Commands ---" << "\n";
-        std::cout << "pbl list - Lists all aliases and their corresponding port number." << "\n";
-        std::cout << "pbl add [alias] [port number] - adds an alias " << "\n";
-        std::cout << "pbl clear - ";
-        std::cout << "\n";
+            std::cout << "--- PortBL Commands ---" << "\n";
+            std::cout << "pbl list - Lists all aliases and their corresponding port number." << "\n";
+            std::cout << "pbl add [alias] [port number] - Add an alias to a specfic port." << "\n";
+            std::cout << "pbl clear - clears all port aliases";
+            std::cout << "pbl unalias [alias / port number] - Removes an alias from a port.";
+            std::cout << "\n";
     }
 
     return 0;
